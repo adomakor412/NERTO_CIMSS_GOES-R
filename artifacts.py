@@ -2,7 +2,7 @@ import sys
 from netCDF4 import Dataset
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.basemap import Basemap
+#from mpl_toolkits.basemap import Basemap
 from pathlib import Path
 from subprocess import Popen
 import itertools
@@ -10,6 +10,8 @@ from pyproj import Proj
 import pyproj
 import xarray as xr
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
 import cartopy
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
@@ -17,8 +19,6 @@ from pyresample import image, geometry
 import metpy
 import seaborn as sns
 sns.set(style="darkgrid")
-import pandas as pd
-import statsmodels.api as sm
 import os
 import os.path as op
 import glob
