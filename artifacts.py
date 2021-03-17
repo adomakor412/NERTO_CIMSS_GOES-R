@@ -66,47 +66,53 @@ def Rad2BT(rad, planck_fk1, planck_fk2, planck_bc1, planck_bc2):
 def main(argv):
     file = argv[0]
     
-    #filelog = open('log_artifact.txt','w')
-    try:
-        #netcdf = glob.glob(op.join(artifact,'*.nc'))
-        #print(netcdf, file=filelog)
-        
-        my_dpi = 192
-        resolution = 5424
-        GOES_R = xr.open_dataset(file)
-        GOES_image = GOES_R['Rad']
-        planck_fk1 = float(GOES_R['planck_fk1'].data)
-        planck_fk2 = float(GOES_R['planck_fk2'].data) 
-        planck_bc1 = float(GOES_R['planck_bc1'].data)                       
-        planck_bc2 = float(GOES_R['planck_bc2'].data)
-        Kelvin_GOES_image = Rad2BT(GOES_image, planck_fk1, planck_fk2, planck_bc1, planck_bc2)
-        plt.figure(figsize=(resolution/my_dpi, resolution/my_dpi), dpi=my_dpi)
-        fig1 = plt.imshow(Kelvin_GOES_image, interpolation='none', vmin=180, vmax=300, cmap='plasma')
-        plt.grid(None)
-        plt.axis('off')
-        naming = str(os.path.basename(os.path.normpath(str(file)[:-3])))+'_UTC_5424x5424.png'           
-        savePath = argv[1]#op.join(store,storage)       
-        if not os.path.isfile(op.join(savePath,naming)):
-            fig1.figure.savefig( op.join(savePath,naming) )
-        #cbar = plt.colorbar()
-        #cbar.ax.set_ylabel('Kelvin')
-        naming = str(os.path.basename(os.path.normpath(file[:-3])))+'_UTC_5424x5424_BW.png'
-        fig1=plt.imshow(Kelvin_GOES_image, cmap ='Greys', vmin=180, vmax=300)    
-        if not os.path.isfile(op.join(savePath,naming)):
-            fig1.figure.savefig(op.join(savePath,naming))
-        plt.close('all')
-        GOES_R.close()
+    naming = str(os.path.basename(os.path.normpath(str(file)[:-3])))+'_UTC_5424x5424.png'           
+    savePath = argv[1]
+    isImage = op.join(savePath, naming)
+    if os.path.isfile(isImage):
+        pass
+    else:
+        #filelog = open('log_artifact.txt','w')
+        try:
+            #netcdf = glob.glob(op.join(artifact,'*.nc'))
+            #print(netcdf, file=filelog)
 
-    except ValueError as e:
-        print('THERE IS AN ERROR')
-        print(file)
-#         print('\n', file = filelog)
-#         print(file, file = filelog)
-#         print(e, file = filelog)
-#         print('\n', file = filelog)
+            my_dpi = 192
+            resolution = 5424
+            GOES_R = xr.open_dataset(file)
+            GOES_image = GOES_R['Rad']
+            planck_fk1 = float(GOES_R['planck_fk1'].data)
+            planck_fk2 = float(GOES_R['planck_fk2'].data) 
+            planck_bc1 = float(GOES_R['planck_bc1'].data)                       
+            planck_bc2 = float(GOES_R['planck_bc2'].data)
+            Kelvin_GOES_image = Rad2BT(GOES_image, planck_fk1, planck_fk2, planck_bc1, planck_bc2)
+            plt.figure(figsize=(resolution/my_dpi, resolution/my_dpi), dpi=my_dpi)
+            fig1= plt.imshow(Kelvin_GOES_image, interpolation='none', vmin=180, vmax=300, cmap='plasma')
+            plt.grid(None)
+            plt.axis('off')
+            naming = str(os.path.basename(os.path.normpath(str(file)[:-3])))+'_UTC_5424x5424.png'           
+            savePath = argv[1]      
+            if not os.path.isfile(op.join(savePath,naming)):
+                fig1.figure.savefig( op.join(savePath,naming) )
+            #cbar = plt.colorbar()
+            #cbar.ax.set_ylabel('Kelvin')
+            naming = str(os.path.basename(os.path.normpath(file[:-3])))+'_UTC_5424x5424_BW.png'
+            fig1=plt.imshow(Kelvin_GOES_image, cmap ='Greys', vmin=180, vmax=300)    
+            if not os.path.isfile(op.join(savePath,naming)):
+                fig1.figure.savefig(op.join(savePath,naming))
+            plt.close('all')
+            GOES_R.close()
 
-    #filelog.close()
-    return
+        except ValueError as e:
+            print('THERE IS AN ERROR')
+            print(file)
+    #         print('\n', file = filelog)
+    #         print(file, file = filelog)
+    #         print(e, file = filelog)
+    #         print('\n', file = filelog)
+
+        #filelog.close()
+        return
 
 if __name__ == "__main__":
    main(sys.argv[1:])
